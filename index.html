@@ -31,7 +31,7 @@
             --gradient-primary: linear-gradient(135deg, #20B2AA 0%, #48D1CC 100%);
             --gradient-secondary: linear-gradient(135deg, #FF6B35 0%, #ff8e62 100%);
             --gradient-accent: linear-gradient(135deg, #28a745 0%, #5cdb7a 100%);
-            --blue-active: #007bff; /* اللون الأزرق للتابات */
+            --blue-active: #007bff;
         }
         
         * {
@@ -42,7 +42,6 @@
         }
         
         body {
-            /* لون خلفية البرنامج أزرق فاتح */
             background-color: #e3f2fd;
             color: var(--dark);
             line-height: 1.6;
@@ -51,7 +50,6 @@
             z-index: 1;
         }
 
-        /* خلفية مائية باستخدام الشعار بشكل مكرر وعشوائي الأحجام */
         body::before {
             content: "";
             position: fixed;
@@ -69,12 +67,11 @@
             background-size: 
                 150px, 220px, 120px, 250px, 180px, 140px, 200px;
             background-repeat: no-repeat;
-            opacity: 0.04; /* شفافية خفيفة جداً لكي لا تزعج الرؤية */
+            opacity: 0.04;
             z-index: -1;
             pointer-events: none;
         }
 
-        /* تنبيه النسخ الاحتياطي */
         #backup-alert {
             display: none;
             background-color: var(--danger);
@@ -172,7 +169,6 @@
             transform: translateY(-2px);
         }
 
-        /* أزرار الهيدر أعلى اليسار */
         .header-actions {
             display: flex;
             gap: 10px;
@@ -275,7 +271,6 @@
             direction: ltr;
         }
         
-        /* الرصيد الحالي باللون الأزرق المائل للأبيض */
         #current-balance {
             background-color: var(--blue-active) !important;
             color: white !important;
@@ -341,7 +336,6 @@
         .inline-buttons { display: flex; gap: 8px; margin-top: 0; }
         .form-buttons { display: flex; gap: 8px; align-items: flex-end; }
         
-        /* تصميم تبويبات العرض */
         .view-tabs {
             display: flex;
             gap: 10px;
@@ -492,7 +486,7 @@
             header, footer, nav, .action-buttons, .btn-print, .search-bar, .no-print, .view-tabs { display: none !important; }
             .page { box-shadow: none; padding: 0; border: none; margin: 0; background: transparent; }
             body { background-color: white; font-size: 12pt; }
-            body::before { display: none !important; } /* إخفاء الخلفية المائية في الطباعة */
+            body::before { display: none !important; }
             th { background: #f0f0f0 !important; color: black !important; }
             .statement-print-header { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
             .statement-print-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 12pt; }
@@ -563,6 +557,7 @@
                         <li><a href="#" class="nav-link" data-page="statements"><i class="fas fa-chart-line"></i> كشف الحساب</a></li>
                         <li><a href="#" class="nav-link" data-page="all-suppliers"><i class="fas fa-users"></i> الموردين</a></li>
                         <li><a href="#" class="nav-link" data-page="opening-balances"><i class="fas fa-balance-scale"></i> الافتتاحي</a></li>
+                        <li><a href="#" class="nav-link" data-page="activity-log"><i class="fas fa-history"></i> سجل الحركات</a></li>
                     </ul>
                 </nav>
                 <div class="header-actions">
@@ -575,6 +570,7 @@
 
     <main>
         <div class="container">
+            <!-- صفحة الفواتير (كما هي) -->
             <section id="suppliers" class="page active">
                 <div class="page-header">
                     <h2 class="page-title"><i class="fas fa-file-invoice"></i> تسجيل فواتير الموردين</h2>
@@ -664,6 +660,7 @@
                 </div>
             </section>
 
+            <!-- صفحة السداد (كما هي) -->
             <section id="payments" class="page">
                 <div class="page-header">
                     <h2 class="page-title"><i class="fas fa-money-bill-wave"></i> سداد الموردين</h2>
@@ -739,6 +736,7 @@
                 </div>
             </section>
 
+            <!-- صفحة كشف الحساب (كما هي) -->
             <section id="statements" class="page">
                 <div class="page-header">
                     <h2 class="page-title"><i class="fas fa-chart-line"></i> كشف حساب المورد</h2>
@@ -805,6 +803,7 @@
                 </div>
             </section>
 
+            <!-- صفحة الموردين (كما هي) -->
             <section id="all-suppliers" class="page">
                 <div class="page-header">
                     <h2 class="page-title"><i class="fas fa-users"></i> إدارة الموردين</h2>
@@ -861,6 +860,7 @@
                 </div>
             </section>
 
+            <!-- صفحة الأرصدة الافتتاحية (كما هي) -->
             <section id="opening-balances" class="page">
                 <div class="page-header">
                     <h2 class="page-title"><i class="fas fa-balance-scale"></i> الرصيد الافتتاحي للموردين</h2>
@@ -904,9 +904,32 @@
                     </table>
                 </div>
             </section>
+
+            <!-- صفحة سجل الحركات (جديدة) -->
+            <section id="activity-log" class="page">
+                <div class="page-header">
+                    <h2 class="page-title"><i class="fas fa-history"></i> سجل الحركات (آخر 45 يوم)</h2>
+                    <span class="badge" style="background:var(--info); color:white; padding:5px 12px; border-radius:20px;">تحديث فوري</span>
+                </div>
+                <div class="card">
+                    <div class="card-header">جميع العمليات المسجلة</div>
+                    <table id="log-table">
+                        <thead>
+                            <tr>
+                                <th>التاريخ والوقت</th>
+                                <th>العملية</th>
+                                <th>التفاصيل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </main>
 
+    <!-- نماذج التعديل (كما هي) -->
     <div id="edit-invoice-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1050,15 +1073,61 @@
     </footer>
 
     <script>
+        // ===== البيانات الأساسية =====
         let suppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
         let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
         let payments = JSON.parse(localStorage.getItem('payments')) || [];
         let openingBalances = JSON.parse(localStorage.getItem('openingBalances')) || [];
-        
-        // متغيرات للتبويبات
-        let currentInvoiceTab = 'today';
-        let currentPaymentTab = 'today';
+        let activityLog = JSON.parse(localStorage.getItem('activityLog')) || [];
 
+        // ===== دوال السجل =====
+        function addActivityLog(action, details) {
+            const now = new Date();
+            const timestamp = now.toISOString(); // للتخزين
+            const displayTime = formatDateTime(now);
+            activityLog.push({
+                timestamp: timestamp,
+                displayTime: displayTime,
+                action: action,
+                details: details
+            });
+            // الاحتفاظ بآخر 45 يوم
+            const cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - 45);
+            activityLog = activityLog.filter(entry => new Date(entry.timestamp) >= cutoff);
+            localStorage.setItem('activityLog', JSON.stringify(activityLog));
+            // تحديث الجدول إذا كانت الصفحة ظاهرة
+            if (document.getElementById('activity-log').classList.contains('active')) {
+                loadActivityLog();
+            }
+        }
+
+        function formatDateTime(date) {
+            const day = String(date.getDate()).padStart(2,'0');
+            const month = String(date.getMonth()+1).padStart(2,'0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2,'0');
+            const minutes = String(date.getMinutes()).padStart(2,'0');
+            const seconds = String(date.getSeconds()).padStart(2,'0');
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        }
+
+        function loadActivityLog() {
+            const tbody = document.querySelector('#log-table tbody');
+            if (!tbody) return;
+            // ترتيب تنازلي (الأحدث أولاً)
+            const sorted = [...activityLog].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            tbody.innerHTML = '';
+            sorted.forEach(entry => {
+                tbody.innerHTML += `<tr>
+                    <td>${entry.displayTime}</td>
+                    <td>${entry.action}</td>
+                    <td>${entry.details}</td>
+                </tr>`;
+            });
+        }
+
+        // ===== دوال مساعدة =====
         function getTodayString() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -1067,41 +1136,736 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
-        // فحص النسخ الاحتياطي
         function checkBackupAlert() {
             const lastBackup = localStorage.getItem('lastBackupTime');
             const now = Date.now();
             const twelveHours = 12 * 60 * 60 * 1000;
             const alertBox = document.getElementById('backup-alert');
-            
             if (!lastBackup || (now - parseInt(lastBackup)) > twelveHours) {
                 alertBox.style.display = 'block';
             } else {
                 alertBox.style.display = 'none';
             }
         }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            checkBackupAlert();
 
-            const todayStr = getTodayString();
-            document.getElementById('invoice-date').value = todayStr;
-            document.getElementById('payment-date').value = todayStr;
-            document.getElementById('balance-date').value = todayStr;
-            
-            const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
-            document.getElementById('start-date').value = firstDayOfMonth;
-            document.getElementById('end-date').value = todayStr;
-            
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-            
+        function getSupplierByName(name) {
+            return suppliers.find(s => s.name.trim() === name.trim());
+        }
+
+        function calculateSupplierBalance(supplierId) {
+            const openingBalance = openingBalances.find(b => b.supplierId === supplierId);
+            let currentBalance = openingBalance ? openingBalance.balance : 0;
+            const supplierInvoices = invoices.filter(inv => inv.supplierId === supplierId);
+            supplierInvoices.forEach(invoice => { currentBalance += invoice.amount; });
+            const supplierPayments = payments.filter(pay => pay.supplierId === supplierId);
+            supplierPayments.forEach(payment => { currentBalance -= payment.amount; });
+            return currentBalance;
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (pageId === 'activity-log') loadActivityLog();
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return dateString;
+            const d = new Date(dateString);
+            if (isNaN(d.getTime())) return '';
+            const day = String(d.getDate()).padStart(2,'0');
+            const month = String(d.getMonth()+1).padStart(2,'0');
+            const year = d.getFullYear();
+            return (String(year).length === 4) ? `${day}/${month}/${year}` : '';
+        }
+
+        function compareDates(date1, date2) {
+            const [d1,m1,y1] = date1.split('/');
+            const [d2,m2,y2] = date2.split('/');
+            return new Date(y1,m1-1,d1) - new Date(y2,m2-1,d2);
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
+        }
+
+        // ===== تحميل البيانات وعرضها =====
+        function loadSuppliers() {
+            const datalist = document.getElementById('suppliers-list');
+            if (datalist) {
+                datalist.innerHTML = '';
+                suppliers.forEach(supplier => {
+                    const option = document.createElement('option');
+                    option.value = supplier.name;
+                    datalist.appendChild(option);
+                });
+            }
+            const tableBody = document.querySelector('#suppliers-table tbody');
+            if (tableBody) {
+                tableBody.innerHTML = '';
+                suppliers.forEach(supplier => {
+                    tableBody.innerHTML += `<tr>
+                        <td>${supplier.name}</td>
+                        <td>${supplier.contact || '-'}</td>
+                        <td>${formatDate(supplier.createdAt)}</td>
+                        <td class="actions-cell">
+                            <button class="btn btn-warning btn-sm" onclick="editSupplier('${supplier.id}')"><i class="fas fa-edit"></i> تعديل</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteSupplier('${supplier.id}')"><i class="fas fa-trash"></i> حذف</button>
+                        </td>
+                    </tr>`;
+                });
+            }
+        }
+
+        // ===== إدارة الموردين =====
+        function saveNewSupplier() {
+            const name = document.getElementById('new-supplier-name').value.trim();
+            const contact = document.getElementById('new-supplier-contact').value.trim();
+            if (!name) { alert('يرجى إدخال اسم المورد'); return; }
+            if (suppliers.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+                alert('هذا المورد مسجل مسبقاً'); return;
+            }
+            const newSupplier = { id: Date.now().toString(), name: name, contact: contact, createdAt: new Date().toISOString() };
+            suppliers.push(newSupplier);
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            document.getElementById('new-supplier-form').reset();
             loadSuppliers();
+            addActivityLog('إضافة مورد', `تم إضافة المورد "${name}"`);
+            alert('تم إضافة المورد بنجاح');
+        }
+
+        function editSupplier(id) {
+            const supplier = suppliers.find(s => s.id === id);
+            if (!supplier) return;
+            document.getElementById('edit-supplier-id').value = supplier.id;
+            document.getElementById('edit-supplier-name').value = supplier.name;
+            document.getElementById('edit-supplier-contact').value = supplier.contact || '';
+            document.getElementById('edit-supplier-modal').classList.add('active');
+        }
+
+        function updateSupplier() {
+            const id = document.getElementById('edit-supplier-id').value;
+            const name = document.getElementById('edit-supplier-name').value.trim();
+            const contact = document.getElementById('edit-supplier-contact').value.trim();
+            if (!name) { alert('يرجى إدخال اسم المورد'); return; }
+            const supplierIndex = suppliers.findIndex(s => s.id === id);
+            if (supplierIndex === -1) return;
+            if (suppliers.some((s, index) => index !== supplierIndex && s.name.toLowerCase() === name.toLowerCase())) {
+                alert('هذا الاسم مسجل لمورد آخر'); return;
+            }
+            const oldName = suppliers[supplierIndex].name;
+            suppliers[supplierIndex].name = name;
+            suppliers[supplierIndex].contact = contact;
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            document.getElementById('edit-supplier-modal').classList.remove('active');
+            loadSuppliers();
+            // تحديث الأسماء المرتبطة في الفواتير والمدفوعات والأرصدة
+            invoices.forEach(i => { if(i.supplierId === id) i.supplierName = name; });
+            payments.forEach(p => { if(p.supplierId === id) p.supplierName = name; });
+            openingBalances.forEach(b => { if(b.supplierId === id) b.supplierName = name; });
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            localStorage.setItem('payments', JSON.stringify(payments));
+            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
+            loadInvoices(); loadPayments(); loadOpeningBalances();
+            addActivityLog('تعديل مورد', `تم تغيير اسم المورد من "${oldName}" إلى "${name}"`);
+            alert('تم تعديل بيانات المورد بنجاح');
+        }
+
+        function deleteSupplier(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا المورد؟ سيتم حذف جميع الفواتير والمدفوعات المرتبطة به.')) return;
+            const supplier = suppliers.find(s => s.id === id);
+            invoices = invoices.filter(invoice => invoice.supplierId !== id);
+            payments = payments.filter(payment => payment.supplierId !== id);
+            openingBalances = openingBalances.filter(balance => balance.supplierId !== id);
+            suppliers = suppliers.filter(supplier => supplier.id !== id);
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            localStorage.setItem('payments', JSON.stringify(payments));
+            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+            loadSuppliers(); loadInvoices(); loadPayments(); loadOpeningBalances();
+            addActivityLog('حذف مورد', `تم حذف المورد "${supplier ? supplier.name : ''}" مع جميع بياناته`);
+            alert('تم الحذف بنجاح');
+        }
+
+        // ===== الفواتير =====
+        let currentInvoiceTab = 'today';
+
+        function setInvoiceTab(tab) {
+            currentInvoiceTab = tab;
+            document.getElementById('btn-inv-today').classList.toggle('active', tab === 'today');
+            document.getElementById('btn-inv-archive').classList.toggle('active', tab === 'archive');
             loadInvoices();
+        }
+
+        function loadInvoices() {
+            const tableBody = document.querySelector('#invoices-table tbody');
+            if (!tableBody) return;
+            const todayStr = getTodayString();
+            let filteredInvoices = invoices.filter(inv => currentInvoiceTab === 'today' ? inv.date === todayStr : inv.date !== todayStr);
+            filteredInvoices.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+            tableBody.innerHTML = '';
+            filteredInvoices.forEach(invoice => {
+                tableBody.innerHTML += `<tr>
+                    <td>${formatDate(invoice.date)}</td>
+                    <td>${invoice.invoiceNumber || '-'}</td>
+                    <td>${invoice.supplierName}</td>
+                    <td>${formatCurrency(invoice.amount)}</td>
+                    <td>${invoice.description || '-'}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-warning btn-sm" onclick="editInvoice('${invoice.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteInvoice('${invoice.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function saveInvoice() {
+            const date = document.getElementById('invoice-date').value;
+            const supplierName = document.getElementById('invoice-supplier').value;
+            const amount = parseFloat(document.getElementById('invoice-amount').value);
+            const description = document.getElementById('invoice-description').value.trim();
+            const invoiceNumber = document.getElementById('invoice-number').value.trim();
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) { alert('المورد غير موجود، يرجى اختياره من القائمة المتاحة.'); return; }
+            const newInvoice = {
+                id: Date.now().toString(), date: date, supplierId: supplier.id,
+                supplierName: supplier.name, amount: amount, description: description,
+                invoiceNumber: invoiceNumber, createdAt: new Date().toISOString()
+            };
+            invoices.push(newInvoice);
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            document.getElementById('invoice-form').reset();
+            document.getElementById('invoice-date').value = getTodayString();
+            loadInvoices();
+            addActivityLog('إضافة فاتورة', `فاتورة رقم ${invoiceNumber || 'بدون رقم'} للمورد "${supplier.name}" بقيمة ${formatCurrency(amount)}`);
+            alert('تم حفظ الفاتورة بنجاح');
+        }
+
+        function editInvoice(id) {
+            const invoice = invoices.find(i => i.id === id);
+            if (!invoice) return;
+            document.getElementById('edit-invoice-id').value = invoice.id;
+            document.getElementById('edit-invoice-date').value = invoice.date;
+            document.getElementById('edit-invoice-supplier').value = invoice.supplierName;
+            document.getElementById('edit-invoice-amount').value = invoice.amount;
+            document.getElementById('edit-invoice-description').value = invoice.description || '';
+            document.getElementById('edit-invoice-number').value = invoice.invoiceNumber || '';
+            document.getElementById('edit-invoice-modal').classList.add('active');
+        }
+
+        function updateInvoice() {
+            const id = document.getElementById('edit-invoice-id').value;
+            const date = document.getElementById('edit-invoice-date').value;
+            const supplierName = document.getElementById('edit-invoice-supplier').value;
+            const amount = parseFloat(document.getElementById('edit-invoice-amount').value);
+            const description = document.getElementById('edit-invoice-description').value.trim();
+            const invoiceNumber = document.getElementById('edit-invoice-number').value.trim();
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) { alert('المورد غير موجود.'); return; }
+            const invoiceIndex = invoices.findIndex(i => i.id === id);
+            if (invoiceIndex === -1) return;
+            const old = invoices[invoiceIndex];
+            invoices[invoiceIndex].date = date; invoices[invoiceIndex].supplierId = supplier.id;
+            invoices[invoiceIndex].supplierName = supplier.name; invoices[invoiceIndex].amount = amount;
+            invoices[invoiceIndex].description = description; invoices[invoiceIndex].invoiceNumber = invoiceNumber;
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            document.getElementById('edit-invoice-modal').classList.remove('active');
+            loadInvoices();
+            addActivityLog('تعديل فاتورة', `تم تعديل الفاتورة رقم ${old.invoiceNumber || 'بدون رقم'} للمورد "${old.supplierName}"`);
+            alert('تم التعديل بنجاح');
+        }
+
+        function deleteInvoice(id) {
+            if (confirm('هل أنت متأكد من الحذف؟')) {
+                const inv = invoices.find(i => i.id === id);
+                invoices = invoices.filter(invoice => invoice.id !== id);
+                localStorage.setItem('invoices', JSON.stringify(invoices));
+                loadInvoices();
+                if (inv) addActivityLog('حذف فاتورة', `تم حذف الفاتورة رقم ${inv.invoiceNumber || 'بدون رقم'} للمورد "${inv.supplierName}"`);
+            }
+        }
+
+        function searchInvoices() {
+            const invoiceNumber = document.getElementById('search-invoice-number').value.trim().toLowerCase();
+            const supplierName = document.getElementById('search-invoice-supplier').value.trim().toLowerCase();
+            let filtered = invoices;
+            if (invoiceNumber) filtered = filtered.filter(inv => inv.invoiceNumber && inv.invoiceNumber.toLowerCase().includes(invoiceNumber));
+            if (supplierName) filtered = filtered.filter(inv => inv.supplierName.toLowerCase().includes(supplierName));
+            filtered.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+            const tableBody = document.querySelector('#invoices-table tbody');
+            tableBody.innerHTML = '';
+            filtered.forEach(invoice => {
+                tableBody.innerHTML += `<tr>
+                    <td>${formatDate(invoice.date)}</td><td>${invoice.invoiceNumber || '-'}</td><td>${invoice.supplierName}</td>
+                    <td>${formatCurrency(invoice.amount)}</td><td>${invoice.description || '-'}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-warning btn-sm" onclick="editInvoice('${invoice.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteInvoice('${invoice.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function resetInvoiceSearch() {
+            document.getElementById('search-invoice-number').value = '';
+            document.getElementById('search-invoice-supplier').value = '';
+            loadInvoices();
+        }
+
+        // ===== المدفوعات =====
+        let currentPaymentTab = 'today';
+
+        function setPaymentTab(tab) {
+            currentPaymentTab = tab;
+            document.getElementById('btn-pay-today').classList.toggle('active', tab === 'today');
+            document.getElementById('btn-pay-archive').classList.toggle('active', tab === 'archive');
             loadPayments();
+        }
+
+        function loadPayments() {
+            const tableBody = document.querySelector('#payments-table tbody');
+            if (!tableBody) return;
+            const todayStr = getTodayString();
+            let filteredPayments = payments.filter(pay => currentPaymentTab === 'today' ? pay.date === todayStr : pay.date !== todayStr);
+            filteredPayments.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+            tableBody.innerHTML = '';
+            filteredPayments.forEach(payment => {
+                tableBody.innerHTML += `<tr>
+                    <td>${formatDate(payment.date)}</td><td>${payment.supplierName}</td>
+                    <td>${formatCurrency(payment.amount)}</td><td>${payment.description || '-'}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-warning btn-sm" onclick="editPayment('${payment.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deletePayment('${payment.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function savePayment() {
+            const date = document.getElementById('payment-date').value;
+            const supplierName = document.getElementById('payment-supplier').value;
+            const amount = parseFloat(document.getElementById('payment-amount').value);
+            const description = document.getElementById('payment-description').value.trim();
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) { alert('المورد غير موجود.'); return; }
+            const newPayment = {
+                id: Date.now().toString(), date: date, supplierId: supplier.id,
+                supplierName: supplier.name, amount: amount, description: description,
+                createdAt: new Date().toISOString()
+            };
+            payments.push(newPayment);
+            localStorage.setItem('payments', JSON.stringify(payments));
+            document.getElementById('payment-form').reset();
+            document.getElementById('payment-date').value = getTodayString();
+            document.getElementById('current-balance').value = '0.00';
+            loadPayments();
+            addActivityLog('إضافة سداد', `سداد للمورد "${supplier.name}" بمبلغ ${formatCurrency(amount)}`);
+            alert('تم الحفظ بنجاح');
+        }
+
+        function editPayment(id) {
+            const payment = payments.find(p => p.id === id);
+            if (!payment) return;
+            document.getElementById('edit-payment-id').value = payment.id;
+            document.getElementById('edit-payment-date').value = payment.date;
+            document.getElementById('edit-payment-supplier').value = payment.supplierName;
+            document.getElementById('edit-payment-amount').value = payment.amount;
+            document.getElementById('edit-payment-description').value = payment.description || '';
+            document.getElementById('edit-payment-modal').classList.add('active');
+        }
+
+        function updatePayment() {
+            const id = document.getElementById('edit-payment-id').value;
+            const date = document.getElementById('edit-payment-date').value;
+            const supplierName = document.getElementById('edit-payment-supplier').value;
+            const amount = parseFloat(document.getElementById('edit-payment-amount').value);
+            const description = document.getElementById('edit-payment-description').value.trim();
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) { alert('المورد غير موجود.'); return; }
+            const paymentIndex = payments.findIndex(p => p.id === id);
+            if (paymentIndex === -1) return;
+            const old = payments[paymentIndex];
+            payments[paymentIndex].date = date; payments[paymentIndex].supplierId = supplier.id;
+            payments[paymentIndex].supplierName = supplier.name; payments[paymentIndex].amount = amount;
+            payments[paymentIndex].description = description;
+            localStorage.setItem('payments', JSON.stringify(payments));
+            document.getElementById('edit-payment-modal').classList.remove('active');
+            loadPayments();
+            addActivityLog('تعديل سداد', `تم تعديل سداد للمورد "${old.supplierName}"`);
+            alert('تم التعديل بنجاح');
+        }
+
+        function deletePayment(id) {
+            if (confirm('هل أنت متأكد من الحذف؟')) {
+                const pay = payments.find(p => p.id === id);
+                payments = payments.filter(payment => payment.id !== id);
+                localStorage.setItem('payments', JSON.stringify(payments));
+                loadPayments();
+                if (pay) addActivityLog('حذف سداد', `تم حذف سداد للمورد "${pay.supplierName}" بمبلغ ${formatCurrency(pay.amount)}`);
+            }
+        }
+
+        function searchPayments() {
+            const supplierName = document.getElementById('search-payment-supplier').value.trim().toLowerCase();
+            let filtered = payments;
+            if (supplierName) filtered = filtered.filter(p => p.supplierName.toLowerCase().includes(supplierName));
+            filtered.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+            const tableBody = document.querySelector('#payments-table tbody');
+            tableBody.innerHTML = '';
+            filtered.forEach(payment => {
+                tableBody.innerHTML += `<tr>
+                    <td>${formatDate(payment.date)}</td><td>${payment.supplierName}</td>
+                    <td>${formatCurrency(payment.amount)}</td><td>${payment.description || '-'}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-warning btn-sm" onclick="editPayment('${payment.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deletePayment('${payment.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function resetPaymentSearch() {
+            document.getElementById('search-payment-supplier').value = '';
+            loadPayments();
+        }
+
+        // ===== الأرصدة الافتتاحية =====
+        function saveOpeningBalance() {
+            const supplierName = document.getElementById('balance-supplier').value;
+            const date = document.getElementById('balance-date').value;
+            const balance = parseFloat(document.getElementById('opening-balance').value);
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) { alert('المورد غير موجود.'); return; }
+            const existingBalanceIndex = openingBalances.findIndex(b => b.supplierId === supplier.id);
+            if (existingBalanceIndex !== -1) {
+                openingBalances[existingBalanceIndex] = {
+                    id: openingBalances[existingBalanceIndex].id, supplierId: supplier.id,
+                    supplierName: supplier.name, balance: balance, date: date, updatedAt: new Date().toISOString()
+                };
+            } else {
+                openingBalances.push({
+                    id: Date.now().toString(), supplierId: supplier.id, supplierName: supplier.name,
+                    balance: balance, date: date, createdAt: new Date().toISOString()
+                });
+            }
+            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
+            document.getElementById('opening-balance-form').reset();
+            document.getElementById('balance-date').value = getTodayString();
             loadOpeningBalances();
+            addActivityLog('إضافة رصيد افتتاحي', `رصيد افتتاحي للمورد "${supplier.name}" بقيمة ${formatCurrency(balance)}`);
+            alert('تم حفظ الرصيد بنجاح');
+        }
+
+        function loadOpeningBalances() {
+            const tableBody = document.querySelector('#balances-table tbody');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+            openingBalances.forEach(balance => {
+                tableBody.innerHTML += `<tr>
+                    <td>${balance.supplierName}</td><td>${formatDate(balance.date)}</td>
+                    <td>${formatCurrency(balance.balance)}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-warning btn-sm" onclick="editOpeningBalance('${balance.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteOpeningBalance('${balance.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function editOpeningBalance(id) {
+            const balance = openingBalances.find(b => b.id === id);
+            if (!balance) return;
+            document.getElementById('edit-balance-id').value = balance.id;
+            document.getElementById('edit-balance-date').value = balance.date;
+            document.getElementById('edit-balance-supplier').value = balance.supplierName;
+            document.getElementById('edit-balance-amount').value = balance.balance;
+            document.getElementById('edit-balance-modal').classList.add('active');
+        }
+
+        function updateOpeningBalance() {
+            const id = document.getElementById('edit-balance-id').value;
+            const date = document.getElementById('edit-balance-date').value;
+            const supplierName = document.getElementById('edit-balance-supplier').value;
+            const amount = parseFloat(document.getElementById('edit-balance-amount').value);
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) { alert('المورد غير موجود.'); return; }
+            const balanceIndex = openingBalances.findIndex(b => b.id === id);
+            if (balanceIndex === -1) return;
+            const old = openingBalances[balanceIndex];
+            openingBalances[balanceIndex].date = date;
+            openingBalances[balanceIndex].supplierId = supplier.id;
+            openingBalances[balanceIndex].supplierName = supplier.name;
+            openingBalances[balanceIndex].balance = amount;
+            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
+            document.getElementById('edit-balance-modal').classList.remove('active');
+            loadOpeningBalances();
+            addActivityLog('تعديل رصيد افتتاحي', `تم تعديل رصيد المورد "${old.supplierName}"`);
+            alert('تم التعديل بنجاح');
+        }
+
+        function deleteOpeningBalance(id) {
+            if (confirm('هل أنت متأكد من الحذف؟')) {
+                const bal = openingBalances.find(b => b.id === id);
+                openingBalances = openingBalances.filter(balance => balance.id !== id);
+                localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
+                loadOpeningBalances();
+                if (bal) addActivityLog('حذف رصيد افتتاحي', `تم حذف رصيد المورد "${bal.supplierName}"`);
+            }
+        }
+
+        // ===== كشف الحساب =====
+        function generateStatement() {
+            const supplierName = document.getElementById('statement-supplier').value;
+            const startDateInput = document.getElementById('start-date').value;
+            const endDateInput = document.getElementById('end-date').value;
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) { alert('المورد غير موجود.'); return; }
+
+            const startDate = formatDate(startDateInput);
+            const endDate = formatDate(endDateInput);
+            const openingBalance = openingBalances.find(b => b.supplierId === supplier.id);
+            let actualOpeningBalance = 0;
+
+            if (openingBalance) {
+                const balanceDate = formatDate(openingBalance.date);
+                if (compareDates(balanceDate, startDate) < 0) {
+                    const invoicesBefore = invoices.filter(inv => inv.supplierId === supplier.id && compareDates(formatDate(inv.date), startDate) < 0);
+                    const paymentsBefore = payments.filter(pay => pay.supplierId === supplier.id && compareDates(formatDate(pay.date), startDate) < 0);
+                    actualOpeningBalance = openingBalance.balance;
+                    invoicesBefore.forEach(inv => actualOpeningBalance += inv.amount);
+                    paymentsBefore.forEach(pay => actualOpeningBalance -= pay.amount);
+                } else {
+                    actualOpeningBalance = openingBalance.balance;
+                }
+            }
+
+            const supplierInvoices = invoices.filter(inv => inv.supplierId === supplier.id && compareDates(formatDate(inv.date), startDate) >= 0 && compareDates(formatDate(inv.date), endDate) <= 0);
+            const supplierPayments = payments.filter(pay => pay.supplierId === supplier.id && compareDates(formatDate(pay.date), startDate) >= 0 && compareDates(formatDate(pay.date), endDate) <= 0);
+            const transactions = [];
+            let currentBalance = actualOpeningBalance;
+
+            if (actualOpeningBalance !== 0) {
+                transactions.push({ date: startDate, type: 'رصيد أول المدة', description: 'رصيد أول المدة', debit: 0, credit: 0, balance: actualOpeningBalance });
+            }
+
+            supplierInvoices.forEach(invoice => {
+                currentBalance += invoice.amount;
+                transactions.push({
+                    date: formatDate(invoice.date),
+                    type: 'فاتورة',
+                    description: invoice.description || `فاتورة ${invoice.invoiceNumber || ''}`,
+                    debit: 0,
+                    credit: invoice.amount,
+                    balance: currentBalance
+                });
+            });
+
+            supplierPayments.forEach(payment => {
+                currentBalance -= payment.amount;
+                transactions.push({
+                    date: formatDate(payment.date),
+                    type: 'سداد',
+                    description: payment.description || 'سداد',
+                    debit: payment.amount,
+                    credit: 0,
+                    balance: currentBalance
+                });
+            });
+
+            transactions.sort((a, b) => compareDates(a.date, b.date));
+            let runningBalance = actualOpeningBalance;
+            transactions.forEach(tx => {
+                if (tx.type === 'رصيد أول المدة') {
+                    tx.balance = runningBalance;
+                } else {
+                    runningBalance += (tx.credit || 0) - (tx.debit || 0);
+                    tx.balance = runningBalance;
+                }
+            });
+
+            displayStatement(supplier, actualOpeningBalance, transactions, startDate, endDate);
+            // تسجيل عملية عرض الكشف
+            addActivityLog('طباعة كشف حساب', `تم عرض كشف حساب للمورد "${supplier.name}" من ${startDate} إلى ${endDate}`);
+        }
+
+        function displayStatement(supplier, openingBalance, transactions, startDate, endDate) {
+            const resultsContainer = document.getElementById('statement-results');
+            const summaryContainer = document.getElementById('statement-summary');
+            const tableBody = document.querySelector('#statement-table tbody');
+            
+            document.getElementById('print-supplier-name').textContent = `اسم المورد: ${supplier.name}`;
+            document.getElementById('print-period').textContent = `الفترة: من ${startDate} إلى ${endDate}`;
+            
+            let totalDebit = 0, totalCredit = 0;
+            transactions.forEach(t => { totalDebit += t.debit; totalCredit += t.credit; });
+            const finalBalance = openingBalance + totalCredit - totalDebit;
+            
+            summaryContainer.innerHTML = `
+                <div class="card">
+                    <div class="card-header">ملخص كشف الحساب</div>
+                    <div class="form-row">
+                        <div class="form-group"><strong>المورد:</strong> ${supplier.name}</div>
+                        <div class="form-group"><strong>الفترة:</strong> من ${startDate} إلى ${endDate}</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><strong>الرصيد الافتتاحي:</strong> <span class="text-warning">${formatCurrency(openingBalance)}</span></div>
+                        <div class="form-group"><strong>إجمالي الفواتير (دائن):</strong> <span class="text-danger">${formatCurrency(totalCredit)}</span></div>
+                        <div class="form-group"><strong>إجمالي السداد (مدين):</strong> <span class="text-success">${formatCurrency(totalDebit)}</span></div>
+                        <div class="form-group"><strong>الرصيد الختامي:</strong> <span class="${finalBalance >= 0 ? 'text-success' : 'text-danger'}">${formatCurrency(finalBalance)}</span></div>
+                    </div>
+                </div>
+            `;
+            
+            tableBody.innerHTML = '';
+            if (openingBalance !== 0) {
+                tableBody.innerHTML += `<tr><td>${startDate}</td><td>رصيد أول المدة</td><td></td><td></td><td class="text-warning">${formatCurrency(openingBalance)}</td></tr>`;
+            }
+            
+            transactions.forEach(t => {
+                if (t.type !== 'رصيد أول المدة') {
+                    tableBody.innerHTML += `<tr>
+                        <td>${t.date}</td>
+                        <td>${t.description}</td>
+                        <td class="text-danger">${t.debit > 0 ? formatCurrency(t.debit) : ''}</td>
+                        <td class="text-success">${t.credit > 0 ? formatCurrency(t.credit) : ''}</td>
+                        <td class="${t.balance >= 0 ? 'text-success' : 'text-danger'}">${formatCurrency(t.balance)}</td>
+                    </tr>`;
+                }
+            });
+            resultsContainer.classList.remove('hidden');
+        }
+
+        function printStatement() {
+            const printContent = document.getElementById('statement-results').innerHTML;
+            const originalContent = document.body.innerHTML;
+            document.body.innerHTML = `
+                <div class="statement-print-header">
+                    <h2>كشف حساب مورد</h2>
+                    <div class="statement-print-info">
+                        ${document.getElementById('print-supplier-name').outerHTML}
+                        ${document.getElementById('print-period').outerHTML}
+                    </div>
+                </div>
+                ${printContent}
+            `;
+            window.print();
+            document.body.innerHTML = originalContent;
             setupEventListeners();
-        });
-        
+            // تسجيل طباعة التقرير
+            const supplierName = document.getElementById('statement-supplier').value || '';
+            if (supplierName) addActivityLog('طباعة تقرير', `تم طباعة كشف حساب للمورد "${supplierName}"`);
+        }
+
+        function saveAsPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'pt', 'a4');
+            const element = document.getElementById('pdf-container');
+            const now = new Date();
+            const formattedDate = `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()}`;
+            document.getElementById("print-date").innerText = formattedDate;
+
+            html2canvas(element, { scale: 1, useCORS: true, logging: false, backgroundColor: '#FFFFFF' }).then(canvas => {
+                const imgData = canvas.toDataURL('image/jpeg', 0.6);
+                const imgWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight; let position = 0;
+
+                doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                heightLeft -= pageHeight;
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight; doc.addPage();
+                    doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                    heightLeft -= pageHeight;
+                }
+                const supplierName = document.getElementById('statement-supplier').value || "غير_محدد";
+                doc.save('كشف_حساب_' + supplierName + '.pdf');
+                // تسجيل حفظ PDF
+                addActivityLog('حفظ PDF', `تم حفظ كشف حساب للمورد "${supplierName}" بصيغة PDF`);
+            });
+        }
+
+        // ===== البحث عن الموردين =====
+        function searchSuppliers() {
+            const nameQuery = document.getElementById('search-supplier-name').value.trim().toLowerCase();
+            let filtered = suppliers;
+            if (nameQuery) { filtered = filtered.filter(s => s.name.toLowerCase().includes(nameQuery)); }
+            const tableBody = document.querySelector('#suppliers-table tbody');
+            tableBody.innerHTML = '';
+            filtered.forEach(s => {
+                tableBody.innerHTML += `<tr>
+                    <td>${s.name}</td><td>${s.contact || '-'}</td><td>${formatDate(s.createdAt)}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-warning btn-sm" onclick="editSupplier('${s.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteSupplier('${s.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function resetSupplierSearch() {
+            document.getElementById('search-supplier-name').value = '';
+            loadSuppliers();
+        }
+
+        // ===== النسخ الاحتياطي والاستعادة =====
+        function createBackup() {
+            const data = {
+                suppliers: suppliers, invoices: invoices, payments: payments,
+                openingBalances: openingBalances, activityLog: activityLog,
+                backupDate: new Date().toISOString()
+            };
+            const dataBlob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(dataBlob);
+            a.download = `suppliers_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            localStorage.setItem('lastBackupTime', Date.now().toString());
+            checkBackupAlert();
+            addActivityLog('نسخ احتياطي', 'تم إنشاء نسخة احتياطية يدوياً');
+            alert('تم إنشاء نسخة احتياطية بنجاح');
+        }
+
+        function restoreBackup() {
+            const input = document.createElement('input');
+            input.type = 'file'; input.accept = '.json';
+            input.onchange = e => {
+                const file = e.target.files[0]; const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (confirm('هل أنت متأكد من استعادة النسخة الاحتياطية؟ سيتم استبدال جميع البيانات الحالية.')) {
+                            suppliers = data.suppliers || []; invoices = data.invoices || [];
+                            payments = data.payments || []; openingBalances = data.openingBalances || [];
+                            activityLog = data.activityLog || [];
+                            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+                            localStorage.setItem('invoices', JSON.stringify(invoices));
+                            localStorage.setItem('payments', JSON.stringify(payments));
+                            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
+                            localStorage.setItem('activityLog', JSON.stringify(activityLog));
+                            loadSuppliers(); loadInvoices(); loadPayments(); loadOpeningBalances();
+                            if (document.getElementById('activity-log').classList.contains('active')) loadActivityLog();
+                            alert('تم الاستعادة بنجاح');
+                        }
+                    } catch (error) { alert('ملف غير صالح'); }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function updateCurrentBalance() {
+            const supplierName = document.getElementById('payment-supplier').value;
+            const supplier = getSupplierByName(supplierName);
+            if (!supplier) {
+                document.getElementById('current-balance').value = '0.00';
+                return;
+            }
+            const balance = calculateSupplierBalance(supplier.id);
+            document.getElementById('current-balance').value = formatCurrency(balance);
+        }
+
+        // ===== إعداد مستمعي الأحداث =====
         function setupEventListeners() {
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -1149,7 +1913,7 @@
             
             document.getElementById('payment-supplier').addEventListener('change', updateCurrentBalance);
 
-            // بحث الجدول الفوري (للفواتير)
+            // بحث فوري في جدول الفواتير
             const searchInputInv = document.getElementById('search-invoice');
             if (searchInputInv) {
                 searchInputInv.addEventListener('input', function() {
@@ -1168,6 +1932,7 @@
                 });
             }
 
+            // تصدير الفواتير إلى Excel
             const exportButton = document.getElementById('export-invoices');
             if(exportButton) {
                 exportButton.addEventListener('click', function() {
@@ -1179,692 +1944,38 @@
                 });
             }
         }
-        
-        function getSupplierByName(name) {
-            return suppliers.find(s => s.name.trim() === name.trim());
-        }
 
-        function updateCurrentBalance() {
-            const supplierName = document.getElementById('payment-supplier').value;
-            const supplier = getSupplierByName(supplierName);
-            
-            if (!supplier) {
-                document.getElementById('current-balance').value = '0.00';
-                return;
-            }
-            
-            const balance = calculateSupplierBalance(supplier.id);
-            document.getElementById('current-balance').value = formatCurrency(balance);
-        }
-        
-        function calculateSupplierBalance(supplierId) {
-            const openingBalance = openingBalances.find(b => b.supplierId === supplierId);
-            let currentBalance = openingBalance ? openingBalance.balance : 0;
-            
-            const supplierInvoices = invoices.filter(inv => inv.supplierId === supplierId);
-            supplierInvoices.forEach(invoice => { currentBalance += invoice.amount; });
-            
-            const supplierPayments = payments.filter(pay => pay.supplierId === supplierId);
-            supplierPayments.forEach(payment => { currentBalance -= payment.amount; });
-            
-            return currentBalance;
-        }
-        
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-        }
-        
-        function loadSuppliers() {
-            const datalist = document.getElementById('suppliers-list');
-            if (datalist) {
-                datalist.innerHTML = '';
-                suppliers.forEach(supplier => {
-                    const option = document.createElement('option');
-                    option.value = supplier.name;
-                    datalist.appendChild(option);
-                });
-            }
-            
-            const tableBody = document.querySelector('#suppliers-table tbody');
-            if (tableBody) {
-                tableBody.innerHTML = '';
-                suppliers.forEach(supplier => {
-                    tableBody.innerHTML += `<tr>
-                        <td>${supplier.name}</td>
-                        <td>${supplier.contact || '-'}</td>
-                        <td>${formatDate(supplier.createdAt)}</td>
-                        <td class="actions-cell">
-                            <button class="btn btn-warning btn-sm" onclick="editSupplier('${supplier.id}')"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteSupplier('${supplier.id}')"><i class="fas fa-trash"></i> حذف</button>
-                        </td>
-                    </tr>`;
-                });
-            }
-        }
-        
-        function saveNewSupplier() {
-            const name = document.getElementById('new-supplier-name').value.trim();
-            const contact = document.getElementById('new-supplier-contact').value.trim();
-            
-            if (!name) { alert('يرجى إدخال اسم المورد'); return; }
-            if (suppliers.some(s => s.name.toLowerCase() === name.toLowerCase())) {
-                alert('هذا المورد مسجل مسبقاً'); return;
-            }
-            
-            const newSupplier = { id: Date.now().toString(), name: name, contact: contact, createdAt: new Date().toISOString() };
-            suppliers.push(newSupplier);
-            localStorage.setItem('suppliers', JSON.stringify(suppliers));
-            document.getElementById('new-supplier-form').reset();
-            loadSuppliers();
-            alert('تم إضافة المورد بنجاح');
-        }
-        
-        function editSupplier(id) {
-            const supplier = suppliers.find(s => s.id === id);
-            if (!supplier) return;
-            document.getElementById('edit-supplier-id').value = supplier.id;
-            document.getElementById('edit-supplier-name').value = supplier.name;
-            document.getElementById('edit-supplier-contact').value = supplier.contact || '';
-            document.getElementById('edit-supplier-modal').classList.add('active');
-        }
-        
-        function updateSupplier() {
-            const id = document.getElementById('edit-supplier-id').value;
-            const name = document.getElementById('edit-supplier-name').value.trim();
-            const contact = document.getElementById('edit-supplier-contact').value.trim();
-            if (!name) { alert('يرجى إدخال اسم المورد'); return; }
-            
-            const supplierIndex = suppliers.findIndex(s => s.id === id);
-            if (supplierIndex === -1) return;
-            
-            if (suppliers.some((s, index) => index !== supplierIndex && s.name.toLowerCase() === name.toLowerCase())) {
-                alert('هذا الاسم مسجل لمورد آخر'); return;
-            }
-            
-            suppliers[supplierIndex].name = name;
-            suppliers[supplierIndex].contact = contact;
-            localStorage.setItem('suppliers', JSON.stringify(suppliers));
-            document.getElementById('edit-supplier-modal').classList.remove('active');
-            loadSuppliers();
-            
-            invoices.forEach(i => { if(i.supplierId === id) i.supplierName = name; });
-            payments.forEach(p => { if(p.supplierId === id) p.supplierName = name; });
-            openingBalances.forEach(b => { if(b.supplierId === id) b.supplierName = name; });
-            
-            localStorage.setItem('invoices', JSON.stringify(invoices));
-            localStorage.setItem('payments', JSON.stringify(payments));
-            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
-            
-            loadInvoices(); loadPayments(); loadOpeningBalances();
-            alert('تم تعديل بيانات المورد بنجاح');
-        }
-        
-        function deleteSupplier(id) {
-            if (!confirm('هل أنت متأكد من حذف هذا المورد؟ سيتم حذف جميع الفواتير والمدفوعات المرتبطة به.')) return;
-            invoices = invoices.filter(invoice => invoice.supplierId !== id);
-            payments = payments.filter(payment => payment.supplierId !== id);
-            openingBalances = openingBalances.filter(balance => balance.supplierId !== id);
-            suppliers = suppliers.filter(supplier => supplier.id !== id);
-            
-            localStorage.setItem('invoices', JSON.stringify(invoices));
-            localStorage.setItem('payments', JSON.stringify(payments));
-            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
-            localStorage.setItem('suppliers', JSON.stringify(suppliers));
-            
-            loadSuppliers(); loadInvoices(); loadPayments(); loadOpeningBalances();
-            alert('تم الحذف بنجاح');
-        }
-        
-        function saveInvoice() {
-            const date = document.getElementById('invoice-date').value;
-            const supplierName = document.getElementById('invoice-supplier').value;
-            const amount = parseFloat(document.getElementById('invoice-amount').value);
-            const description = document.getElementById('invoice-description').value.trim();
-            const invoiceNumber = document.getElementById('invoice-number').value.trim();
-            
-            const supplier = getSupplierByName(supplierName);
-            if (!supplier) { alert('المورد غير موجود، يرجى اختياره من القائمة المتاحة.'); return; }
-            
-            const newInvoice = {
-                id: Date.now().toString(), date: date, supplierId: supplier.id,
-                supplierName: supplier.name, amount: amount, description: description,
-                invoiceNumber: invoiceNumber, createdAt: new Date().toISOString()
-            };
-            
-            invoices.push(newInvoice);
-            localStorage.setItem('invoices', JSON.stringify(invoices));
-            document.getElementById('invoice-form').reset();
-            document.getElementById('invoice-date').value = getTodayString();
-            loadInvoices();
-            alert('تم حفظ الفاتورة بنجاح');
-        }
-        
-        function setInvoiceTab(tab) {
-            currentInvoiceTab = tab;
-            document.getElementById('btn-inv-today').classList.toggle('active', tab === 'today');
-            document.getElementById('btn-inv-archive').classList.toggle('active', tab === 'archive');
-            loadInvoices();
-        }
-
-        function loadInvoices() {
-            const tableBody = document.querySelector('#invoices-table tbody');
-            if (!tableBody) return;
-
-            const todayStr = getTodayString();
-            let filteredInvoices = invoices.filter(inv => currentInvoiceTab === 'today' ? inv.date === todayStr : inv.date !== todayStr);
-            filteredInvoices.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
-
-            tableBody.innerHTML = '';
-            filteredInvoices.forEach(invoice => {
-                tableBody.innerHTML += `<tr>
-                    <td>${formatDate(invoice.date)}</td>
-                    <td>${invoice.invoiceNumber || '-'}</td>
-                    <td>${invoice.supplierName}</td>
-                    <td>${formatCurrency(invoice.amount)}</td>
-                    <td>${invoice.description || '-'}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-warning btn-sm" onclick="editInvoice('${invoice.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteInvoice('${invoice.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-            });
-        }
-        
-        function editInvoice(id) {
-            const invoice = invoices.find(i => i.id === id);
-            if (!invoice) return;
-            document.getElementById('edit-invoice-id').value = invoice.id;
-            document.getElementById('edit-invoice-date').value = invoice.date;
-            document.getElementById('edit-invoice-supplier').value = invoice.supplierName;
-            document.getElementById('edit-invoice-amount').value = invoice.amount;
-            document.getElementById('edit-invoice-description').value = invoice.description || '';
-            document.getElementById('edit-invoice-number').value = invoice.invoiceNumber || '';
-            document.getElementById('edit-invoice-modal').classList.add('active');
-        }
-        
-        function updateInvoice() {
-            const id = document.getElementById('edit-invoice-id').value;
-            const date = document.getElementById('edit-invoice-date').value;
-            const supplierName = document.getElementById('edit-invoice-supplier').value;
-            const amount = parseFloat(document.getElementById('edit-invoice-amount').value);
-            const description = document.getElementById('edit-invoice-description').value.trim();
-            const invoiceNumber = document.getElementById('edit-invoice-number').value.trim();
-            
-            const supplier = getSupplierByName(supplierName);
-            if (!supplier) { alert('المورد غير موجود.'); return; }
-            
-            const invoiceIndex = invoices.findIndex(i => i.id === id);
-            if (invoiceIndex === -1) return;
-            
-            invoices[invoiceIndex].date = date; invoices[invoiceIndex].supplierId = supplier.id;
-            invoices[invoiceIndex].supplierName = supplier.name; invoices[invoiceIndex].amount = amount;
-            invoices[invoiceIndex].description = description; invoices[invoiceIndex].invoiceNumber = invoiceNumber;
-            
-            localStorage.setItem('invoices', JSON.stringify(invoices));
-            document.getElementById('edit-invoice-modal').classList.remove('active');
-            loadInvoices(); alert('تم التعديل بنجاح');
-        }
-        
-        function deleteInvoice(id) {
-            if (confirm('هل أنت متأكد من الحذف؟')) {
-                invoices = invoices.filter(invoice => invoice.id !== id);
-                localStorage.setItem('invoices', JSON.stringify(invoices));
-                loadInvoices();
-            }
-        }
-        
-        function searchInvoices() {
-            const invoiceNumber = document.getElementById('search-invoice-number').value.trim().toLowerCase();
-            const supplierName = document.getElementById('search-invoice-supplier').value.trim().toLowerCase();
-            let filtered = invoices;
-            if (invoiceNumber) filtered = filtered.filter(inv => inv.invoiceNumber && inv.invoiceNumber.toLowerCase().includes(invoiceNumber));
-            if (supplierName) filtered = filtered.filter(inv => inv.supplierName.toLowerCase().includes(supplierName));
-            
-            filtered.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
-            const tableBody = document.querySelector('#invoices-table tbody');
-            tableBody.innerHTML = '';
-            filtered.forEach(invoice => {
-                tableBody.innerHTML += `<tr>
-                    <td>${formatDate(invoice.date)}</td><td>${invoice.invoiceNumber || '-'}</td><td>${invoice.supplierName}</td>
-                    <td>${formatCurrency(invoice.amount)}</td><td>${invoice.description || '-'}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-warning btn-sm" onclick="editInvoice('${invoice.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteInvoice('${invoice.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-            });
-        }
-        
-        function resetInvoiceSearch() {
-            document.getElementById('search-invoice-number').value = '';
-            document.getElementById('search-invoice-supplier').value = '';
-            loadInvoices();
-        }
-        
-        function savePayment() {
-            const date = document.getElementById('payment-date').value;
-            const supplierName = document.getElementById('payment-supplier').value;
-            const amount = parseFloat(document.getElementById('payment-amount').value);
-            const description = document.getElementById('payment-description').value.trim();
-            
-            const supplier = getSupplierByName(supplierName);
-            if (!supplier) { alert('المورد غير موجود.'); return; }
-            
-            const newPayment = {
-                id: Date.now().toString(), date: date, supplierId: supplier.id,
-                supplierName: supplier.name, amount: amount, description: description,
-                createdAt: new Date().toISOString()
-            };
-            payments.push(newPayment);
-            localStorage.setItem('payments', JSON.stringify(payments));
-            document.getElementById('payment-form').reset();
-            document.getElementById('payment-date').value = getTodayString();
-            document.getElementById('current-balance').value = '0.00';
-            loadPayments(); alert('تم الحفظ بنجاح');
-        }
-
-        function setPaymentTab(tab) {
-            currentPaymentTab = tab;
-            document.getElementById('btn-pay-today').classList.toggle('active', tab === 'today');
-            document.getElementById('btn-pay-archive').classList.toggle('active', tab === 'archive');
-            loadPayments();
-        }
-        
-        function loadPayments() {
-            const tableBody = document.querySelector('#payments-table tbody');
-            if (!tableBody) return;
-            const todayStr = getTodayString();
-            let filteredPayments = payments.filter(pay => currentPaymentTab === 'today' ? pay.date === todayStr : pay.date !== todayStr);
-            filteredPayments.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
-            tableBody.innerHTML = '';
-            filteredPayments.forEach(payment => {
-                tableBody.innerHTML += `<tr>
-                    <td>${formatDate(payment.date)}</td><td>${payment.supplierName}</td>
-                    <td>${formatCurrency(payment.amount)}</td><td>${payment.description || '-'}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-warning btn-sm" onclick="editPayment('${payment.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="deletePayment('${payment.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-            });
-        }
-        
-        function editPayment(id) {
-            const payment = payments.find(p => p.id === id);
-            if (!payment) return;
-            document.getElementById('edit-payment-id').value = payment.id;
-            document.getElementById('edit-payment-date').value = payment.date;
-            document.getElementById('edit-payment-supplier').value = payment.supplierName;
-            document.getElementById('edit-payment-amount').value = payment.amount;
-            document.getElementById('edit-payment-description').value = payment.description || '';
-            document.getElementById('edit-payment-modal').classList.add('active');
-        }
-        
-        function updatePayment() {
-            const id = document.getElementById('edit-payment-id').value;
-            const date = document.getElementById('edit-payment-date').value;
-            const supplierName = document.getElementById('edit-payment-supplier').value;
-            const amount = parseFloat(document.getElementById('edit-payment-amount').value);
-            const description = document.getElementById('edit-payment-description').value.trim();
-            
-            const supplier = getSupplierByName(supplierName);
-            if (!supplier) { alert('المورد غير موجود.'); return; }
-            
-            const paymentIndex = payments.findIndex(p => p.id === id);
-            if (paymentIndex === -1) return;
-            payments[paymentIndex].date = date; payments[paymentIndex].supplierId = supplier.id;
-            payments[paymentIndex].supplierName = supplier.name; payments[paymentIndex].amount = amount;
-            payments[paymentIndex].description = description;
-            
-            localStorage.setItem('payments', JSON.stringify(payments));
-            document.getElementById('edit-payment-modal').classList.remove('active');
-            loadPayments(); alert('تم التعديل بنجاح');
-        }
-        
-        function searchPayments() {
-            const supplierName = document.getElementById('search-payment-supplier').value.trim().toLowerCase();
-            let filtered = payments;
-            if (supplierName) filtered = filtered.filter(p => p.supplierName.toLowerCase().includes(supplierName));
-            filtered.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
-            const tableBody = document.querySelector('#payments-table tbody');
-            tableBody.innerHTML = '';
-            filtered.forEach(payment => {
-                tableBody.innerHTML += `<tr>
-                    <td>${formatDate(payment.date)}</td><td>${payment.supplierName}</td>
-                    <td>${formatCurrency(payment.amount)}</td><td>${payment.description || '-'}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-warning btn-sm" onclick="editPayment('${payment.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="deletePayment('${payment.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-            });
-        }
-        
-        function resetPaymentSearch() {
-            document.getElementById('search-payment-supplier').value = '';
-            loadPayments();
-        }
-        
-        function deletePayment(id) {
-            if (confirm('هل أنت متأكد من الحذف؟')) {
-                payments = payments.filter(payment => payment.id !== id);
-                localStorage.setItem('payments', JSON.stringify(payments));
-                loadPayments();
-            }
-        }
-        
-        function saveOpeningBalance() {
-            const supplierName = document.getElementById('balance-supplier').value;
-            const date = document.getElementById('balance-date').value;
-            const balance = parseFloat(document.getElementById('opening-balance').value);
-            
-            const supplier = getSupplierByName(supplierName);
-            if (!supplier) { alert('المورد غير موجود.'); return; }
-            
-            const existingBalanceIndex = openingBalances.findIndex(b => b.supplierId === supplier.id);
-            if (existingBalanceIndex !== -1) {
-                openingBalances[existingBalanceIndex] = {
-                    id: openingBalances[existingBalanceIndex].id, supplierId: supplier.id,
-                    supplierName: supplier.name, balance: balance, date: date, updatedAt: new Date().toISOString()
-                };
-            } else {
-                openingBalances.push({
-                    id: Date.now().toString(), supplierId: supplier.id, supplierName: supplier.name,
-                    balance: balance, date: date, createdAt: new Date().toISOString()
-                });
-            }
-            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
-            document.getElementById('opening-balance-form').reset();
-            document.getElementById('balance-date').value = getTodayString();
-            loadOpeningBalances(); alert('تم حفظ الرصيد بنجاح');
-        }
-
-        // تعديل الرصيد الافتتاحي
-        function editOpeningBalance(id) {
-            const balance = openingBalances.find(b => b.id === id);
-            if (!balance) return;
-            document.getElementById('edit-balance-id').value = balance.id;
-            document.getElementById('edit-balance-date').value = balance.date;
-            document.getElementById('edit-balance-supplier').value = balance.supplierName;
-            document.getElementById('edit-balance-amount').value = balance.balance;
-            document.getElementById('edit-balance-modal').classList.add('active');
-        }
-
-        function updateOpeningBalance() {
-            const id = document.getElementById('edit-balance-id').value;
-            const date = document.getElementById('edit-balance-date').value;
-            const supplierName = document.getElementById('edit-balance-supplier').value;
-            const amount = parseFloat(document.getElementById('edit-balance-amount').value);
-
-            const supplier = getSupplierByName(supplierName);
-            if (!supplier) { alert('المورد غير موجود.'); return; }
-
-            const balanceIndex = openingBalances.findIndex(b => b.id === id);
-            if (balanceIndex === -1) return;
-
-            openingBalances[balanceIndex].date = date;
-            openingBalances[balanceIndex].supplierId = supplier.id;
-            openingBalances[balanceIndex].supplierName = supplier.name;
-            openingBalances[balanceIndex].balance = amount;
-
-            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
-            document.getElementById('edit-balance-modal').classList.remove('active');
-            loadOpeningBalances();
-            alert('تم التعديل بنجاح');
-        }
-        
-        function loadOpeningBalances() {
-            const tableBody = document.querySelector('#balances-table tbody');
-            if (!tableBody) return;
-            tableBody.innerHTML = '';
-            openingBalances.forEach(balance => {
-                tableBody.innerHTML += `<tr>
-                    <td>${balance.supplierName}</td><td>${formatDate(balance.date)}</td>
-                    <td>${formatCurrency(balance.balance)}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-warning btn-sm" onclick="editOpeningBalance('${balance.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteOpeningBalance('${balance.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-            });
-        }
-        
-        function deleteOpeningBalance(id) {
-            if (confirm('هل أنت متأكد من الحذف؟')) {
-                openingBalances = openingBalances.filter(balance => balance.id !== id);
-                localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
-                loadOpeningBalances();
-            }
-        }
-        
-        function generateStatement() {
-            const supplierName = document.getElementById('statement-supplier').value;
-            const startDateInput = document.getElementById('start-date').value;
-            const endDateInput = document.getElementById('end-date').value;
-            const supplier = getSupplierByName(supplierName);
-            if (!supplier) { alert('المورد غير موجود.'); return; }
-
-            const startDate = formatDate(startDateInput);
-            const endDate = formatDate(endDateInput);
-            const openingBalance = openingBalances.find(b => b.supplierId === supplier.id);
-            let actualOpeningBalance = 0;
-
-            if (openingBalance) {
-                const balanceDate = formatDate(openingBalance.date);
-                if (compareDates(balanceDate, startDate) < 0) {
-                    const invoicesBefore = invoices.filter(inv => inv.supplierId === supplier.id && compareDates(formatDate(inv.date), startDate) < 0);
-                    const paymentsBefore = payments.filter(pay => pay.supplierId === supplier.id && compareDates(formatDate(pay.date), startDate) < 0);
-                    actualOpeningBalance = openingBalance.balance;
-                    invoicesBefore.forEach(inv => actualOpeningBalance += inv.amount);
-                    paymentsBefore.forEach(pay => actualOpeningBalance -= pay.amount);
-                } else {
-                    actualOpeningBalance = openingBalance.balance;
-                }
-            }
-
-            const supplierInvoices = invoices.filter(inv => inv.supplierId === supplier.id && compareDates(formatDate(inv.date), startDate) >= 0 && compareDates(formatDate(inv.date), endDate) <= 0);
-            const supplierPayments = payments.filter(pay => pay.supplierId === supplier.id && compareDates(formatDate(pay.date), startDate) >= 0 && compareDates(formatDate(pay.date), endDate) <= 0);
-            const transactions = [];
-            let currentBalance = actualOpeningBalance;
-
-            if (actualOpeningBalance !== 0) {
-                transactions.push({ date: startDate, type: 'رصيد أول المدة', description: 'رصيد أول المدة', debit: 0, credit: 0, balance: actualOpeningBalance });
-            }
-
-            supplierInvoices.forEach(invoice => {
-                currentBalance += invoice.amount;
-                transactions.push({ date: formatDate(invoice.date), type: 'فاتورة', description: invoice.description || `فاتورة ${invoice.invoiceNumber || ''}`, debit: invoice.amount, credit: 0, balance: currentBalance });
-            });
-
-            supplierPayments.forEach(payment => {
-                currentBalance -= payment.amount;
-                transactions.push({ date: formatDate(payment.date), type: 'سداد', description: payment.description || 'سداد', debit: 0, credit: payment.amount, balance: currentBalance });
-            });
-
-            transactions.sort((a, b) => compareDates(a.date, b.date));
-            let runningBalance = actualOpeningBalance;
-            transactions.forEach(tx => {
-                if (tx.type === 'رصيد أول المدة') { tx.balance = runningBalance; }
-                else { runningBalance += (tx.debit || 0) - (tx.credit || 0); tx.balance = runningBalance; }
-            });
-
-            displayStatement(supplier, actualOpeningBalance, transactions, startDate, endDate);
-        }
-
-        function displayStatement(supplier, openingBalance, transactions, startDate, endDate) {
-            const resultsContainer = document.getElementById('statement-results');
-            const summaryContainer = document.getElementById('statement-summary');
-            const tableBody = document.querySelector('#statement-table tbody');
-            
-            document.getElementById('print-supplier-name').textContent = `اسم المورد: ${supplier.name}`;
-            document.getElementById('print-period').textContent = `الفترة: من ${startDate} إلى ${endDate}`;
-            
-            let totalDebit = 0; let totalCredit = 0;
-            transactions.forEach(t => { totalDebit += t.debit; totalCredit += t.credit; });
-            const finalBalance = openingBalance + totalDebit - totalCredit;
-            
-            summaryContainer.innerHTML = `
-                <div class="card">
-                    <div class="card-header">ملخص كشف الحساب</div>
-                    <div class="form-row">
-                        <div class="form-group"><strong>المورد:</strong> ${supplier.name}</div>
-                        <div class="form-group"><strong>الفترة:</strong> من ${startDate} إلى ${endDate}</div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><strong>الرصيد الافتتاحي:</strong> <span class="text-warning">${formatCurrency(openingBalance)}</span></div>
-                        <div class="form-group"><strong>إجمالي المشتريات:</strong> <span class="text-danger">${formatCurrency(totalDebit)}</span></div>
-                        <div class="form-group"><strong>إجمالي السداد:</strong> <span class="text-success">${formatCurrency(totalCredit)}</span></div>
-                        <div class="form-group"><strong>الرصيد الختامي:</strong> <span class="${finalBalance >= 0 ? 'text-success' : 'text-danger'}">${formatCurrency(finalBalance)}</span></div>
-                    </div>
-                </div>
-            `;
-            
-            tableBody.innerHTML = '';
-            if (openingBalance !== 0) {
-                tableBody.innerHTML += `<tr><td>${startDate}</td><td>رصيد أول المدة</td><td></td><td></td><td class="text-warning">${formatCurrency(openingBalance)}</td></tr>`;
-            }
-            
-            transactions.forEach(t => {
-                if (t.type !== 'رصيد أول المدة') {
-                    tableBody.innerHTML += `<tr>
-                        <td>${t.date}</td><td>${t.description}</td>
-                        <td class="text-danger">${t.debit > 0 ? formatCurrency(t.debit) : ''}</td>
-                        <td class="text-success">${t.credit > 0 ? formatCurrency(t.credit) : ''}</td>
-                        <td class="${t.balance >= 0 ? 'text-success' : 'text-danger'}">${formatCurrency(t.balance)}</td>
-                    </tr>`;
-                }
-            });
-            resultsContainer.classList.remove('hidden');
-        }
-        
-        function printStatement() {
-            const printContent = document.getElementById('statement-results').innerHTML;
-            const originalContent = document.body.innerHTML;
-            document.body.innerHTML = `
-                <div class="statement-print-header">
-                    <h2>كشف حساب مورد</h2>
-                    <div class="statement-print-info">
-                        ${document.getElementById('print-supplier-name').outerHTML}
-                        ${document.getElementById('print-period').outerHTML}
-                    </div>
-                </div>
-                ${printContent}
-            `;
-            window.print();
-            document.body.innerHTML = originalContent;
-            setupEventListeners();
-        }
-        
-        function saveAsPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'pt', 'a4');
-            const element = document.getElementById('pdf-container');
-            const now = new Date();
-            const formattedDate = `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()}`;
-            document.getElementById("print-date").innerText = formattedDate;
-
-            html2canvas(element, { scale: 1, useCORS: true, logging: false, backgroundColor: '#FFFFFF' }).then(canvas => {
-                const imgData = canvas.toDataURL('image/jpeg', 0.6);
-                const imgWidth = doc.internal.pageSize.getWidth();
-                const pageHeight = doc.internal.pageSize.getHeight();
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                let heightLeft = imgHeight; let position = 0;
-
-                doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                heightLeft -= pageHeight;
-                while (heightLeft >= 0) {
-                    position = heightLeft - imgHeight; doc.addPage();
-                    doc.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                    heightLeft -= pageHeight;
-                }
-                const supplierName = document.getElementById('statement-supplier').value || "غير_محدد";
-                doc.save('كشف_حساب_' + supplierName + '.pdf');
-            });
-        }
-        
-        function searchSuppliers() {
-            const nameQuery = document.getElementById('search-supplier-name').value.trim().toLowerCase();
-            let filtered = suppliers;
-            if (nameQuery) { filtered = filtered.filter(s => s.name.toLowerCase().includes(nameQuery)); }
-            const tableBody = document.querySelector('#suppliers-table tbody');
-            tableBody.innerHTML = '';
-            filtered.forEach(s => {
-                tableBody.innerHTML += `<tr>
-                    <td>${s.name}</td><td>${s.contact || '-'}</td><td>${formatDate(s.createdAt)}</td>
-                    <td class="actions-cell">
-                        <button class="btn btn-warning btn-sm" onclick="editSupplier('${s.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteSupplier('${s.id}')"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>`;
-            });
-        }
-        
-        function resetSupplierSearch() {
-            document.getElementById('search-supplier-name').value = '';
-            loadSuppliers();
-        }
-        
-        function createBackup() {
-            const data = {
-                suppliers: suppliers, invoices: invoices, payments: payments,
-                openingBalances: openingBalances, backupDate: new Date().toISOString()
-            };
-            const dataBlob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(dataBlob);
-            a.download = `suppliers_backup_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            localStorage.setItem('lastBackupTime', Date.now().toString());
+        // ===== بدء التطبيق =====
+        document.addEventListener('DOMContentLoaded', function() {
             checkBackupAlert();
-            alert('تم إنشاء نسخة احتياطية بنجاح');
-        }
-        
-        function restoreBackup() {
-            const input = document.createElement('input');
-            input.type = 'file'; input.accept = '.json';
-            input.onchange = e => {
-                const file = e.target.files[0]; const reader = new FileReader();
-                reader.onload = function(event) {
-                    try {
-                        const data = JSON.parse(event.target.result);
-                        if (confirm('هل أنت متأكد من استعادة النسخة الاحتياطية؟ سيتم استبدال جميع البيانات الحالية.')) {
-                            suppliers = data.suppliers || []; invoices = data.invoices || [];
-                            payments = data.payments || []; openingBalances = data.openingBalances || [];
-                            localStorage.setItem('suppliers', JSON.stringify(suppliers));
-                            localStorage.setItem('invoices', JSON.stringify(invoices));
-                            localStorage.setItem('payments', JSON.stringify(payments));
-                            localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
-                            loadSuppliers(); loadInvoices(); loadPayments(); loadOpeningBalances();
-                            alert('تم الاستعادة بنجاح');
-                        }
-                    } catch (error) { alert('ملف غير صالح'); }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        }
-        
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) return dateString;
-            const d = new Date(dateString);
-            if (isNaN(d.getTime())) return '';
-            const day = String(d.getDate()).padStart(2,'0');
-            const month = String(d.getMonth()+1).padStart(2,'0');
-            const year = d.getFullYear();
-            return (String(year).length === 4) ? `${day}/${month}/${year}` : '';
-        }
 
-        function compareDates(date1, date2) {
-            const [d1,m1,y1] = date1.split('/');
-            const [d2,m2,y2] = date2.split('/');
-            return new Date(y1,m1-1,d1) - new Date(y2,m2-1,d2);
-        }        
-        
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
-        }
+            const todayStr = getTodayString();
+            document.getElementById('invoice-date').value = todayStr;
+            document.getElementById('payment-date').value = todayStr;
+            document.getElementById('balance-date').value = todayStr;
+            
+            const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
+            document.getElementById('start-date').value = firstDayOfMonth;
+            document.getElementById('end-date').value = todayStr;
+            
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            loadSuppliers();
+            loadInvoices();
+            loadPayments();
+            loadOpeningBalances();
+            if (document.getElementById('activity-log').classList.contains('active')) loadActivityLog();
+            setupEventListeners();
+
+            // تنظيف السجل من العمليات الأقدم من 45 يوماً عند بدء التشغيل
+            const cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - 45);
+            const oldCount = activityLog.filter(entry => new Date(entry.timestamp) < cutoff).length;
+            if (oldCount > 0) {
+                activityLog = activityLog.filter(entry => new Date(entry.timestamp) >= cutoff);
+                localStorage.setItem('activityLog', JSON.stringify(activityLog));
+            }
+        });
     </script>
 </body>
 </html>
