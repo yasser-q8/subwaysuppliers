@@ -911,15 +911,19 @@
                                 <label for="new-supplier-name"><i class="fas fa-user-tie"></i> اسم المورد</label>
                                 <input type="text" id="new-supplier-name" class="input-supplier" required>
                             </div>
-                            <div class="form-group">
-                                <label for="new-supplier-contact"><i class="fas fa-phone"></i> معلومات الاتصال</label>
-                                <textarea id="new-supplier-contact" class="textarea-small"></textarea>
+                            <!-- تم تعديل هذا القسم: الأزرار أصبحت بجوار معلومات الاتصال -->
+                            <div class="form-group" style="flex: 2; display: flex; gap: 10px; align-items: flex-end;">
+                                <div style="flex: 1;">
+                                    <label for="new-supplier-contact"><i class="fas fa-phone"></i> معلومات الاتصال</label>
+                                    <textarea id="new-supplier-contact" class="textarea-small"></textarea>
+                                </div>
+                                <div class="form-buttons" style="display: flex; gap: 8px; align-items: flex-end; padding-bottom: 2px;">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ المورد</button>
+                                    <button type="reset" class="btn btn-secondary"><i class="fas fa-times"></i> إلغاء</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="action-buttons">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ المورد</button>
-                            <button type="reset" class="btn btn-secondary"><i class="fas fa-times"></i> إلغاء</button>
-                        </div>
+                        <!-- تم حذف صف الأزرار المنفصل -->
                     </form>
                 </div>
                 
@@ -1627,10 +1631,9 @@
         }
 
         // ============================================================
-        // 5. دوال إدارة الموردين (مع ترتيب الأعمدة الجديد)
+        // 5. دوال إدارة الموردين
         // ============================================================
         function loadSuppliers() {
-            // تحديث قائمة الـ datalist
             const datalist = document.getElementById('suppliers-list');
             if (datalist) {
                 datalist.innerHTML = '';
@@ -1641,13 +1644,11 @@
                 });
             }
 
-            // حساب الرصيد لكل مورد
             const suppliersWithBalance = suppliers.map(supplier => {
                 const balance = calculateSupplierBalance(supplier.id);
                 return { ...supplier, balance };
             });
 
-            // ترتيب تنازلي حسب الرصيد
             suppliersWithBalance.sort((a, b) => b.balance - a.balance);
 
             const tableBody = document.querySelector('#suppliers-table tbody');
@@ -1655,7 +1656,6 @@
                 tableBody.innerHTML = '';
                 suppliersWithBalance.forEach(supplier => {
                     const balanceClass = supplier.balance >= 0 ? 'text-success' : 'text-danger';
-                    // ترتيب الأعمدة: اسم المورد، الرصيد، معلومات الاتصال، تاريخ الإضافة، الإجراءات
                     tableBody.innerHTML += `<tr>
                         <td>${supplier.name}</td>
                         <td class="${balanceClass}" style="font-weight:bold;">${formatCurrency(supplier.balance)}</td>
@@ -1670,7 +1670,6 @@
             }
         }
 
-        // ===== باقي دوال الإدارة =====
         function saveNewSupplier() {
             const name = document.getElementById('new-supplier-name').value.trim();
             const contact = document.getElementById('new-supplier-contact').value.trim();
@@ -1711,7 +1710,6 @@
             suppliers[supplierIndex].contact = contact;
             localStorage.setItem('suppliers', JSON.stringify(suppliers));
             document.getElementById('edit-supplier-modal').classList.remove('active');
-            // تحديث الأسماء في الجداول المرتبطة
             invoices.forEach(i => { if(i.supplierId === id) i.supplierName = name; });
             payments.forEach(p => { if(p.supplierId === id) p.supplierName = name; });
             openingBalances.forEach(b => { if(b.supplierId === id) b.supplierName = name; });
@@ -1790,7 +1788,7 @@
             document.getElementById('invoice-form').reset();
             document.getElementById('invoice-date').value = getTodayString();
             loadInvoices();
-            loadSuppliers(); // تحديث الرصيد
+            loadSuppliers();
             addAuditEntry('add', 'invoices', `إضافة فاتورة رقم ${invoiceNumber || 'بدون رقم'} للمورد ${supplier.name}`, null, newInvoice);
             alert('تم حفظ الفاتورة بنجاح');
         }
@@ -2413,7 +2411,6 @@
             if (nameQuery) {
                 filtered = filtered.filter(s => s.name.toLowerCase().includes(nameQuery));
             }
-            // حساب الرصيد لكل مورد في النتائج وترتيبها
             const withBalance = filtered.map(s => {
                 const balance = calculateSupplierBalance(s.id);
                 return { ...s, balance };
@@ -2424,7 +2421,6 @@
             tableBody.innerHTML = '';
             withBalance.forEach(s => {
                 const balanceClass = s.balance >= 0 ? 'text-success' : 'text-danger';
-                // ترتيب الأعمدة الجديد
                 tableBody.innerHTML += `<tr>
                     <td>${s.name}</td>
                     <td class="${balanceClass}" style="font-weight:bold;">${formatCurrency(s.balance)}</td>
