@@ -544,6 +544,25 @@
             font-family: Arial;
         }
 
+        /* نافذة كلمة المرور المخصصة */
+        .password-modal .modal-content {
+            max-width: 350px;
+            text-align: center;
+        }
+        .password-modal input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 4px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        .password-modal .btn {
+            width: 100%;
+        }
+
         @media print {
             header, footer, nav, .action-buttons, .btn-print, .search-bar, .no-print, .view-tabs { display: none !important; }
             .page { box-shadow: none; padding: 0; border: none; margin: 0; background: transparent; }
@@ -601,6 +620,22 @@
 
     <div id="backup-alert">
         <i class="fas fa-exclamation-triangle"></i> تنبيه هام: لم تقم بعمل نسخة احتياطية للبيانات منذ أكثر من 12 ساعة. يرجى أخذ نسخة الآن لحماية بياناتك!
+    </div>
+
+    <!-- نافذة كلمة المرور المخصصة لسجل الحركات -->
+    <div id="passwordModal" class="modal password-modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-lock"></i> أدخل كلمة المرور</h3>
+                <button class="close-modal" onclick="closePasswordModal()">&times;</button>
+            </div>
+            <div style="padding: 10px 0;">
+                <p style="color:#666; margin-bottom:10px;">للوصول إلى سجل الحركات، يرجى إدخال كلمة المرور:</p>
+                <input type="password" id="auditPasswordInput" placeholder="•••••" maxlength="10" autofocus>
+                <button class="btn btn-primary" onclick="checkAuditPassword()" style="margin-top:10px;"><i class="fas fa-unlock"></i> تأكيد</button>
+                <button class="btn btn-secondary" onclick="closePasswordModal()" style="margin-top:5px;">إلغاء</button>
+            </div>
+        </div>
     </div>
 
     <datalist id="suppliers-list"></datalist>
@@ -902,11 +937,12 @@
                 </div>
                 
                 <div class="mt-15">
-                    <h3><i class="fas fa-list"></i> جميع الموردين</h3>
+                    <h3><i class="fas fa-list"></i> جميع الموردين (مرتبون حسب الرصيد تنازلياً)</h3>
                     <table id="suppliers-table">
                         <thead>
                             <tr>
                                 <th>اسم المورد</th>
+                                <th>الرصيد الحالي</th>
                                 <th>معلومات الاتصال</th>
                                 <th>تاريخ الإضافة</th>
                                 <th>الإجراءات</th>
@@ -985,6 +1021,7 @@
                         <label>إلى:</label>
                         <input type="date" id="audit_to" onchange="renderAuditLog()">
                         <button class="btn btn-excel" onclick="exportAuditExcel()">📊 تصدير Excel</button>
+                        <button class="btn btn-pdf" onclick="exportAuditPDF()">📄 تصدير PDF</button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -1417,6 +1454,75 @@
             addAuditEntry('export', 'system', 'تصدير سجل الحركات إلى Excel', null, null);
         }
 
+        async function exportAuditPDF() {
+            const table = document.getElementById('auditTable');
+            const tbody = document.getElementById('auditTbody');
+            if (!tbody || tbody.children.length === 0) {
+                alert('لا توجد سجلات لتصديرها إلى PDF.');
+                return;
+            }
+
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '-9999px';
+            container.style.width = '794px';
+            container.style.background = '#ffffff';
+            container.style.direction = 'rtl';
+            container.style.fontFamily = 'Arial, sans-serif';
+            container.style.padding = '30px 35px';
+            document.body.appendChild(container);
+
+            const now = new Date();
+            const printDate = `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()}`;
+            const headerHTML = `
+                <div style="text-align:center; margin-bottom:20px; border-bottom:2px solid #0a74da; padding-bottom:10px;">
+                    <img src="https://i.postimg.cc/3wX7WF0f/Subway-Logo.png" style="height:60px; margin-bottom:5px;">
+                    <h2 style="margin:0; color:#0a74da;">Subway Supermarket صب واي ماركت</h2>
+                    <p style="margin:0; font-size:12px;">فرع فيكتوريا – 45 شارع سيبويه – موبايل: 01102511775</p>
+                    <p style="margin:0; font-size:12px;">البريد الإلكتروني: subwaysupermarket@gmail.com</p>
+                    <h3 style="margin-top:10px; color:#333;">سجل الحركات (آخر 45 يوم)</h3>
+                    <p style="font-size:12px;">تاريخ الطباعة: ${printDate}</p>
+                    <p style="font-size:12px;">نوع العملية: ${document.getElementById('audit_type_filter').options[document.getElementById('audit_type_filter').selectedIndex].text}</p>
+                </div>
+            `;
+            container.innerHTML = headerHTML;
+
+            const tableClone = table.cloneNode(true);
+            tableClone.style.width = '100%';
+            tableClone.style.borderCollapse = 'collapse';
+            tableClone.style.fontSize = '12px';
+            const cells = tableClone.querySelectorAll('th, td');
+            cells.forEach(cell => {
+                cell.style.border = '1px solid #ddd';
+                cell.style.padding = '8px';
+                cell.style.textAlign = 'right';
+            });
+            const headers = tableClone.querySelectorAll('th');
+            headers.forEach(th => {
+                th.style.background = '#0a74da';
+                th.style.color = 'white';
+            });
+            container.appendChild(tableClone);
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'pt', 'a4');
+                const imgWidth = pdf.internal.pageSize.getWidth();
+                const canvas = await html2canvas(container, { scale: 1.5, useCORS: true, logging: false, backgroundColor: '#ffffff' });
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                pdf.save(`سجل_الحركات_${new Date().toISOString().split('T')[0]}.pdf`);
+                addAuditEntry('export', 'system', 'تصدير سجل الحركات إلى PDF', null, null);
+            } catch (error) {
+                console.error(error);
+                alert('حدث خطأ أثناء تصدير PDF.');
+            } finally {
+                document.body.removeChild(container);
+            }
+        }
+
         // ============================================================
         // 4. دوال مساعدة
         // ============================================================
@@ -1455,10 +1561,49 @@
         }
 
         function showPage(pageId) {
+            if (pageId === 'audit') {
+                document.getElementById('passwordModal').style.display = 'flex';
+                document.getElementById('auditPasswordInput').value = '';
+                document.getElementById('auditPasswordInput').focus();
+                window._pendingPage = pageId;
+                return;
+            }
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             if (pageId === 'audit') renderAuditLog();
         }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            window._pendingPage = null;
+        }
+
+        function checkAuditPassword() {
+            const input = document.getElementById('auditPasswordInput');
+            const password = input.value;
+            if (password === '55555') {
+                document.getElementById('passwordModal').style.display = 'none';
+                const pageId = window._pendingPage || 'audit';
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+                if (pageId === 'audit') renderAuditLog();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelector(`[data-page="${pageId}"]`)?.classList.add('active');
+                window._pendingPage = null;
+            } else {
+                alert('كلمة المرور غير صحيحة.');
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('auditPasswordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAuditPassword();
+                }
+            });
+        });
 
         function formatDate(dateString) {
             if (!dateString) return '';
@@ -1482,9 +1627,10 @@
         }
 
         // ============================================================
-        // 5. دوال إدارة البيانات
+        // 5. دوال إدارة الموردين (مع ترتيب الأعمدة الجديد)
         // ============================================================
         function loadSuppliers() {
+            // تحديث قائمة الـ datalist
             const datalist = document.getElementById('suppliers-list');
             if (datalist) {
                 datalist.innerHTML = '';
@@ -1494,12 +1640,25 @@
                     datalist.appendChild(option);
                 });
             }
+
+            // حساب الرصيد لكل مورد
+            const suppliersWithBalance = suppliers.map(supplier => {
+                const balance = calculateSupplierBalance(supplier.id);
+                return { ...supplier, balance };
+            });
+
+            // ترتيب تنازلي حسب الرصيد
+            suppliersWithBalance.sort((a, b) => b.balance - a.balance);
+
             const tableBody = document.querySelector('#suppliers-table tbody');
             if (tableBody) {
                 tableBody.innerHTML = '';
-                suppliers.forEach(supplier => {
+                suppliersWithBalance.forEach(supplier => {
+                    const balanceClass = supplier.balance >= 0 ? 'text-success' : 'text-danger';
+                    // ترتيب الأعمدة: اسم المورد، الرصيد، معلومات الاتصال، تاريخ الإضافة، الإجراءات
                     tableBody.innerHTML += `<tr>
                         <td>${supplier.name}</td>
+                        <td class="${balanceClass}" style="font-weight:bold;">${formatCurrency(supplier.balance)}</td>
                         <td>${supplier.contact || '-'}</td>
                         <td>${formatDate(supplier.createdAt)}</td>
                         <td class="actions-cell">
@@ -1511,6 +1670,7 @@
             }
         }
 
+        // ===== باقي دوال الإدارة =====
         function saveNewSupplier() {
             const name = document.getElementById('new-supplier-name').value.trim();
             const contact = document.getElementById('new-supplier-contact').value.trim();
@@ -1551,13 +1711,14 @@
             suppliers[supplierIndex].contact = contact;
             localStorage.setItem('suppliers', JSON.stringify(suppliers));
             document.getElementById('edit-supplier-modal').classList.remove('active');
-            loadSuppliers();
+            // تحديث الأسماء في الجداول المرتبطة
             invoices.forEach(i => { if(i.supplierId === id) i.supplierName = name; });
             payments.forEach(p => { if(p.supplierId === id) p.supplierName = name; });
             openingBalances.forEach(b => { if(b.supplierId === id) b.supplierName = name; });
             localStorage.setItem('invoices', JSON.stringify(invoices));
             localStorage.setItem('payments', JSON.stringify(payments));
             localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
+            loadSuppliers();
             loadInvoices(); loadPayments(); loadOpeningBalances();
             addAuditEntry('edit', 'suppliers', `تعديل مورد: ${old.name} → ${name}`, old, suppliers[supplierIndex]);
             alert('تم تعديل بيانات المورد بنجاح');
@@ -1579,7 +1740,9 @@
             alert('تم الحذف بنجاح');
         }
 
-        // الفواتير
+        // ============================================================
+        // 6. دوال الفواتير
+        // ============================================================
         function setInvoiceTab(tab) {
             currentInvoiceTab = tab;
             document.getElementById('btn-inv-today').classList.toggle('active', tab === 'today');
@@ -1627,6 +1790,7 @@
             document.getElementById('invoice-form').reset();
             document.getElementById('invoice-date').value = getTodayString();
             loadInvoices();
+            loadSuppliers(); // تحديث الرصيد
             addAuditEntry('add', 'invoices', `إضافة فاتورة رقم ${invoiceNumber || 'بدون رقم'} للمورد ${supplier.name}`, null, newInvoice);
             alert('تم حفظ الفاتورة بنجاح');
         }
@@ -1661,6 +1825,7 @@
             localStorage.setItem('invoices', JSON.stringify(invoices));
             document.getElementById('edit-invoice-modal').classList.remove('active');
             loadInvoices();
+            loadSuppliers();
             addAuditEntry('edit', 'invoices', `تعديل فاتورة رقم ${old.invoiceNumber || 'بدون رقم'}`, old, invoices[invoiceIndex]);
             alert('تم التعديل بنجاح');
         }
@@ -1671,6 +1836,7 @@
                 invoices = invoices.filter(invoice => invoice.id !== id);
                 localStorage.setItem('invoices', JSON.stringify(invoices));
                 loadInvoices();
+                loadSuppliers();
                 if (inv) addAuditEntry('delete', 'invoices', `حذف فاتورة رقم ${inv.invoiceNumber || 'بدون رقم'}`, inv, null);
             }
         }
@@ -1702,7 +1868,9 @@
             loadInvoices();
         }
 
-        // المدفوعات
+        // ============================================================
+        // 7. دوال المدفوعات
+        // ============================================================
         function setPaymentTab(tab) {
             currentPaymentTab = tab;
             document.getElementById('btn-pay-today').classList.toggle('active', tab === 'today');
@@ -1747,6 +1915,7 @@
             document.getElementById('payment-date').value = getTodayString();
             document.getElementById('current-balance').value = '0.00';
             loadPayments();
+            loadSuppliers();
             addAuditEntry('add', 'payments', `إضافة سداد للمورد ${supplier.name} بقيمة ${formatCurrency(amount)}`, null, newPayment);
             alert('تم الحفظ بنجاح');
         }
@@ -1779,6 +1948,7 @@
             localStorage.setItem('payments', JSON.stringify(payments));
             document.getElementById('edit-payment-modal').classList.remove('active');
             loadPayments();
+            loadSuppliers();
             addAuditEntry('edit', 'payments', `تعديل سداد للمورد ${old.supplierName}`, old, payments[paymentIndex]);
             alert('تم التعديل بنجاح');
         }
@@ -1789,6 +1959,7 @@
                 payments = payments.filter(payment => payment.id !== id);
                 localStorage.setItem('payments', JSON.stringify(payments));
                 loadPayments();
+                loadSuppliers();
                 if (pay) addAuditEntry('delete', 'payments', `حذف سداد للمورد ${pay.supplierName}`, pay, null);
             }
         }
@@ -1817,7 +1988,9 @@
             loadPayments();
         }
 
-        // الأرصدة الافتتاحية
+        // ============================================================
+        // 8. دوال الأرصدة الافتتاحية
+        // ============================================================
         function saveOpeningBalance() {
             const supplierName = document.getElementById('balance-supplier').value;
             const date = document.getElementById('balance-date').value;
@@ -1842,6 +2015,7 @@
             document.getElementById('opening-balance-form').reset();
             document.getElementById('balance-date').value = getTodayString();
             loadOpeningBalances();
+            loadSuppliers();
             const newObj = openingBalances.find(b => b.supplierId === supplier.id);
             addAuditEntry('add', 'openingBalances', `إضافة/تحديث رصيد افتتاحي للمورد ${supplier.name}`, old, newObj);
             alert('تم حفظ الرصيد بنجاح');
@@ -1890,6 +2064,7 @@
             localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
             document.getElementById('edit-balance-modal').classList.remove('active');
             loadOpeningBalances();
+            loadSuppliers();
             addAuditEntry('edit', 'openingBalances', `تعديل رصيد افتتاحي للمورد ${old.supplierName}`, old, openingBalances[balanceIndex]);
             alert('تم التعديل بنجاح');
         }
@@ -1900,12 +2075,13 @@
                 openingBalances = openingBalances.filter(balance => balance.id !== id);
                 localStorage.setItem('openingBalances', JSON.stringify(openingBalances));
                 loadOpeningBalances();
+                loadSuppliers();
                 if (bal) addAuditEntry('delete', 'openingBalances', `حذف رصيد افتتاحي للمورد ${bal.supplierName}`, bal, null);
             }
         }
 
         // ============================================================
-        // 6. كشف الحساب
+        // 9. كشف الحساب
         // ============================================================
         function generateStatement() {
             const supplierName = document.getElementById('statement-supplier').value;
@@ -2036,7 +2212,6 @@
                 }
             });
 
-            // إضافة الإجمالي الكلي والرصيد الختامي في صف واحد
             const totalRow = document.createElement('tr');
             totalRow.style.fontWeight = 'bold';
             totalRow.style.background = '#e8f5e9';
@@ -2052,7 +2227,7 @@
         }
 
         // ============================================================
-        // 7. حفظ PDF - إعادة كتابة كاملة لحل مشكلة التتابع
+        // 10. حفظ PDF لكشف الحساب
         // ============================================================
         async function saveAsPDF() {
             const data = currentStatementData;
@@ -2061,9 +2236,7 @@
                 return;
             }
 
-            // تحضير الصفوف
             const rows = [];
-            // إضافة الرصيد الافتتاحي
             if (data.openingBalance !== 0) {
                 rows.push({
                     date: data.startDate,
@@ -2073,7 +2246,6 @@
                     balance: data.openingBalance
                 });
             }
-            // إضافة المعاملات
             data.transactions.forEach(t => {
                 if (t.type !== 'رصيد أول المدة') {
                     rows.push({
@@ -2086,7 +2258,6 @@
                 }
             });
 
-            // حساب المجاميع الكلية
             let totalDebit = 0, totalCredit = 0;
             rows.forEach(r => {
                 if (r.debit) totalDebit += r.debit;
@@ -2094,17 +2265,13 @@
             });
             const finalBalance = data.finalBalance;
 
-            // عدد الصفوف في الصفحة الواحدة (حوالي 22 سطراً مع مراعاة الهوامش)
             const rowsPerPage = 22;
             const totalRows = rows.length;
-
-            // تقسيم الصفوف إلى صفحات
             const pagesData = [];
             for (let i = 0; i < totalRows; i += rowsPerPage) {
                 pagesData.push(rows.slice(i, i + rowsPerPage));
             }
 
-            // إنشاء الحاوية المخفية
             const container = document.createElement('div');
             container.style.position = 'fixed';
             container.style.top = '0';
@@ -2160,16 +2327,12 @@
                 </table>
             `;
 
-            // متغيرات لتتبع المجاميع التراكمية
-            let cumulativeDebit = 0;
-            let cumulativeCredit = 0;
+            let cumulativeDebit = 0, cumulativeCredit = 0;
 
-            // إنشاء الصفحات
             for (let p = 0; p < pagesData.length; p++) {
                 const pageRows = pagesData[p];
                 const isLastPage = (p === pagesData.length - 1);
 
-                // إنشاء صفحة جديدة
                 const pageDiv = createPage();
                 pageDiv.innerHTML = getHeaderHTML();
                 const tableWrap = document.createElement('div');
@@ -2177,18 +2340,10 @@
                 pageDiv.appendChild(tableWrap);
                 const tbody = tableWrap.querySelector('tbody');
 
-                // إضافة صفوف الصفحة
                 let pageDebit = 0, pageCredit = 0;
                 pageRows.forEach(row => {
-                    // تحديث المجاميع التراكمية
-                    if (row.debit) {
-                        cumulativeDebit += row.debit;
-                        pageDebit += row.debit;
-                    }
-                    if (row.credit) {
-                        cumulativeCredit += row.credit;
-                        pageCredit += row.credit;
-                    }
+                    if (row.debit) { cumulativeDebit += row.debit; pageDebit += row.debit; }
+                    if (row.credit) { cumulativeCredit += row.credit; pageCredit += row.credit; }
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td style="padding:8px; border:1px solid #ddd;">${row.date}</td>
@@ -2200,9 +2355,7 @@
                     tbody.appendChild(tr);
                 });
 
-                // إضافة صف إجمالي الصفحة (مع الرصيد التراكمي) باستثناء الصفحة الأخيرة
                 if (!isLastPage) {
-                    // الرصيد التراكمي = رصيد آخر صف في هذه الصفحة
                     const lastRow = pageRows[pageRows.length - 1];
                     const cumulativeBalance = lastRow ? lastRow.balance : data.openingBalance;
                     const totalRow = document.createElement('tr');
@@ -2216,7 +2369,6 @@
                     `;
                     tbody.appendChild(totalRow);
                 } else {
-                    // الصفحة الأخيرة: إضافة صف الإجمالي الكلي مع الرصيد الختامي في نفس الصف
                     const totalRow = document.createElement('tr');
                     totalRow.style.fontWeight = 'bold';
                     totalRow.style.background = '#e8f5e9';
@@ -2230,7 +2382,6 @@
                 }
             }
 
-            // تحويل إلى PDF
             try {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'pt', 'a4');
@@ -2254,17 +2405,31 @@
         }
 
         // ============================================================
-        // 8. دوال البحث والتصدير الأخرى
+        // 11. دوال البحث والتصدير الأخرى
         // ============================================================
         function searchSuppliers() {
             const nameQuery = document.getElementById('search-supplier-name').value.trim().toLowerCase();
             let filtered = suppliers;
-            if (nameQuery) { filtered = filtered.filter(s => s.name.toLowerCase().includes(nameQuery)); }
+            if (nameQuery) {
+                filtered = filtered.filter(s => s.name.toLowerCase().includes(nameQuery));
+            }
+            // حساب الرصيد لكل مورد في النتائج وترتيبها
+            const withBalance = filtered.map(s => {
+                const balance = calculateSupplierBalance(s.id);
+                return { ...s, balance };
+            });
+            withBalance.sort((a, b) => b.balance - a.balance);
+
             const tableBody = document.querySelector('#suppliers-table tbody');
             tableBody.innerHTML = '';
-            filtered.forEach(s => {
+            withBalance.forEach(s => {
+                const balanceClass = s.balance >= 0 ? 'text-success' : 'text-danger';
+                // ترتيب الأعمدة الجديد
                 tableBody.innerHTML += `<tr>
-                    <td>${s.name}</td><td>${s.contact || '-'}</td><td>${formatDate(s.createdAt)}</td>
+                    <td>${s.name}</td>
+                    <td class="${balanceClass}" style="font-weight:bold;">${formatCurrency(s.balance)}</td>
+                    <td>${s.contact || '-'}</td>
+                    <td>${formatDate(s.createdAt)}</td>
                     <td class="actions-cell">
                         <button class="btn btn-warning btn-sm" onclick="editSupplier('${s.id}')"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-danger btn-sm" onclick="deleteSupplier('${s.id}')"><i class="fas fa-trash"></i></button>
@@ -2336,7 +2501,7 @@
         }
 
         // ============================================================
-        // 9. إعداد مستمعي الأحداث
+        // 12. إعداد مستمعي الأحداث
         // ============================================================
         function setupEventListeners() {
             document.querySelectorAll('.nav-link').forEach(link => {
@@ -2417,7 +2582,7 @@
         }
 
         // ============================================================
-        // 10. بدء التطبيق
+        // 13. بدء التطبيق
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             checkBackupAlert();
